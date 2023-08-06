@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>dplayer演示</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=11" />
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+  <style type="text/css">
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    .soure-url-form {
+      height: 36px;
+      width: 80%;
+      min-width: 280px;
+      margin: 20px auto;
+    }
+
+    .soure-url-form input#soureUrl {
+      width: 80%;
+      height: 30px;
+      line-height: 30px;
+      float: left;
+    }
+
+    .soure-url-form button {
+      width: 18%;
+      min-width: 80px;
+      height: 100%;
+      float: right;
+    }
+
+    .video-wrap {
+      min-height: 500px;
+      margin: 15px;
+      min-width: 250px;
+      background-color: black;
+      display: flex;
+    }
+
+    #playerCnt {
+      width: 100%;
+      height: 100%;
+      margin: auto;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flv.js/1.6.2/flv.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.4.10/hls.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dashjs/4.7.1/dash.all.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/webtorrent/1.9.7/webtorrent.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dplayer/1.22.1/DPlayer.min.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dplayer/1.22.1/DPlayer.min.js"></script>
+</head>
+
+<body marginwidth="0" marginheight="0">
+  <div class="soure-url-form">
+    <input id="soureUrl" type="text" value="https://file.freephim.net/m3u8/044c2bad67fa00ee19495cbf3cfca97d.m3u8">
+    <button onclick="javascript:resetPlayer();">播 放</button>
+  </div>
+  <div class="video-wrap">
+    <div id="playerCnt"></div>
+  </div>
+
+  <script type="text/javascript">
+    var PlayerInfo = {
+      PlayUrl: 'https://bitvtom1000.xyz/hls/v2/35677012298f1cfd4f8de3ea13a8c288/playlist.m3u8',
+      // PlayUrl: 'https://file.freephim.net/m3u8/044c2bad67fa00ee19495cbf3cfca97d.m3u8',
+      PlayLinkNext: ''
+    }
+
+    var type = 'normal';
+    var live = false;
+    var dp = null;
+
+    var playerCnt = $('#playerCnt').get(0);
+    var realPlayUrl = ''
+
+    function resetPlayer() {
+      let soureUrl = $('#soureUrl').val();
+      if ('' === soureUrl) {
+        alert('播放地址不能为空，应该是一个有效的.m3u8/.flv/.mpd或者以magnet:开头资源的访问路径！')
+      }
+      realPlayUrl = soureUrl || 'https://file.freephim.net/m3u8/044c2bad67fa00ee19495cbf3cfca97d.m3u8';
+
+      if (realPlayUrl.indexOf('.m3u8') > -1) {
+        type = 'hls';
+        live = true;
+      }
+      else if (realPlayUrl.indexOf('magnet:') > -1) {
+        type = 'webtorrent';
+      }
+      else if (realPlayUrl.indexOf('.flv') > -1) {
+        type = 'flv';
+      }
+      else if (realPlayUrl.indexOf('.mpd') > -1) {
+        type = 'dash';
+      }
+      if (!dp) {
+        console.log(playerCnt)
+        dp = new DPlayer({
+          container: playerCnt,
+          autoplay: true,
+          screenshot: false,
+          video: {
+            url: realPlayUrl,
+            live: live,
+            type: type
+          },
+          contextmenu: []
+        });
+
+        dp.on('ended', function () {
+          if (PlayerInfo.PlayLinkNext != '') {
+            // location.href = PlayerInfo.PlayLinkNext;
+            dp.switchVideo(
+              {
+                url: PlayerInfo.PlayLinkNext,
+                live: live,
+                type: type
+              }
+            );
+          }
+        });
+      } else {
+        dp.switchVideo(
+          {
+            url: realPlayUrl,
+            live: live,
+            type: type
+          }
+        );
+      }
+      // $.ajax({
+      //   url: "https://j.freephim.net/api/Home/Parse2?url=" + 'P2p%2fcjh3mx1flTgsUafA8vO%2fCpiw%2fwi60lkt4SvYwQMfMaDkAhFtXMiKVeIr1X2XQBGWVuzdA9hR64yYtDRsk7bxKDunStr9wtdgwzn5hLbROxlKhzX28XgzCaUysW2WsHa41wk46JK6t9e0ERYjjTyIcb7vFnP08Ew3QYkcUakHld217X1K4r8BQzyKnLKF1B%2fwwSvKudL67fKHnBgKIUDKT6ftJFVtZllFLLmnxKs0p5ASBs0DLygeGk8ZXzovY3HMWkbQU0eOFsAQD%2bPV25qwF%2bf%2bcC15onGafthoZJU6HeBzHMegKjL2zChGSWDCDGdrG5hMzEE5x3j5PZd0pauIL8rU%2b0PS%2fnAVUtwsC1DOmBP6SM49Tg%3d%3d',
+      //   headers: headers,
+      //   success: function (result) {
+      //     if (result.code === 200) {}
+      //   }
+      // })
+    }
+  </script>
+</body>
+
+</html>
