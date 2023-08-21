@@ -2,151 +2,278 @@
 <html>
 
 <head>
-  <title>dplayer演示</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=11" />
-  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
-  <style type="text/css">
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      margin: 0;
-    }
-
-    .soure-url-form {
-      height: 36px;
-      width: 80%;
-      min-width: 280px;
-      margin: 20px auto;
-    }
-
-    .soure-url-form input#soureUrl {
-      width: 80%;
-      height: 30px;
-      line-height: 30px;
-      float: left;
-    }
-
-    .soure-url-form button {
-      width: 18%;
-      min-width: 80px;
-      height: 100%;
-      float: right;
-    }
-
-    .video-wrap {
-      min-height: 500px;
-      margin: 15px;
-      min-width: 250px;
-      background-color: black;
-      display: flex;
-    }
-
-    #playerCnt {
-      width: 100%;
-      height: 100%;
-      margin: auto;
-    }
-  </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flv.js/1.6.2/flv.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.4.10/hls.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dashjs/4.7.1/dash.all.min.js"></script>
-  <script type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/webtorrent/1.9.7/webtorrent.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dplayer/1.22.1/DPlayer.min.css">
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dplayer/1.22.1/DPlayer.min.js"></script>
-</head>
-
-<body marginwidth="0" marginheight="0">
-  <div class="soure-url-form">
-    <input id="soureUrl" type="text" value="https://file.freephim.net/m3u8/044c2bad67fa00ee19495cbf3cfca97d.m3u8">
-    <button onclick="javascript:resetPlayer();">播 放</button>
-  </div>
-  <div class="video-wrap">
-    <div id="playerCnt"></div>
-  </div>
-
+  <meta charset="utf-8" />
   <script type="text/javascript">
-    var PlayerInfo = {
-      PlayUrl: 'https://bitvtom1000.xyz/hls/v2/35677012298f1cfd4f8de3ea13a8c288/playlist.m3u8',
-      // PlayUrl: 'https://file.freephim.net/m3u8/044c2bad67fa00ee19495cbf3cfca97d.m3u8',
-      PlayLinkNext: ''
-    }
 
-    var type = 'normal';
-    var live = false;
-    var dp = null;
+    // //平台、设备和操作系统
+    // var system = {
+    //   win: false,
+    //   mac: false,
+    //   xll: false
+    // };
+    // //检测平台
+    // var p = navigator.platform;
+    // system.win = p.indexOf("Win") == 0;
+    // system.mac = p.indexOf("Mac") == 0;
+    // system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+    // //跳转语句，如果是手机访问就自动跳转到wap.baidu.com页面
+    // if (system.win || system.mac || system.xll) {
 
-    var playerCnt = $('#playerCnt').get(0);
-    var realPlayUrl = ''
+    // } else {
+    //   window.location.href = "sj.html";
+    // }
+  </script>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>全网VIP视频解析</title>
+  <meta name="keywords" content="优酷VIP解析,爱奇艺VIP解析,腾讯VIP解析,乐视VIP解析,芒果VIP解析,全网视频解析,VIP在线解析,视频VIP在线解析,VIP视频在线解析" />
+  <meta name="description" content="优酷VIP解析,爱奇艺VIP解析,腾讯VIP解析,乐视VIP解析,芒果VIP解析,全网视频解析,VIP在线解析,视频VIP在线解析,VIP视频在线解析" />
+  <!-- <link href="style2.css" rel="stylesheet" type="text/css" /> -->
 
-    function resetPlayer() {
-      let soureUrl = $('#soureUrl').val();
-      if ('' === soureUrl) {
-        alert('播放地址不能为空，应该是一个有效的.m3u8/.flv/.mpd或者以magnet:开头资源的访问路径！')
-      }
-      realPlayUrl = soureUrl || 'https://file.freephim.net/m3u8/044c2bad67fa00ee19495cbf3cfca97d.m3u8';
-
-      if (realPlayUrl.indexOf('.m3u8') > -1) {
-        type = 'hls';
-        live = true;
-      }
-      else if (realPlayUrl.indexOf('magnet:') > -1) {
-        type = 'webtorrent';
-      }
-      else if (realPlayUrl.indexOf('.flv') > -1) {
-        type = 'flv';
-      }
-      else if (realPlayUrl.indexOf('.mpd') > -1) {
-        type = 'dash';
-      }
-      if (!dp) {
-        console.log(playerCnt)
-        dp = new DPlayer({
-          container: playerCnt,
-          autoplay: true,
-          screenshot: false,
-          video: {
-            url: realPlayUrl,
-            live: live,
-            type: type
-          },
-          contextmenu: []
-        });
-
-        dp.on('ended', function () {
-          if (PlayerInfo.PlayLinkNext != '') {
-            // location.href = PlayerInfo.PlayLinkNext;
-            dp.switchVideo(
-              {
-                url: PlayerInfo.PlayLinkNext,
-                live: live,
-                type: type
-              }
-            );
-          }
-        });
-      } else {
-        dp.switchVideo(
-          {
-            url: realPlayUrl,
-            live: live,
-            type: type
-          }
-        );
-      }
-      // $.ajax({
-      //   url: "https://j.freephim.net/api/Home/Parse2?url=" + 'P2p%2fcjh3mx1flTgsUafA8vO%2fCpiw%2fwi60lkt4SvYwQMfMaDkAhFtXMiKVeIr1X2XQBGWVuzdA9hR64yYtDRsk7bxKDunStr9wtdgwzn5hLbROxlKhzX28XgzCaUysW2WsHa41wk46JK6t9e0ERYjjTyIcb7vFnP08Ew3QYkcUakHld217X1K4r8BQzyKnLKF1B%2fwwSvKudL67fKHnBgKIUDKT6ftJFVtZllFLLmnxKs0p5ASBs0DLygeGk8ZXzovY3HMWkbQU0eOFsAQD%2bPV25qwF%2bf%2bcC15onGafthoZJU6HeBzHMegKjL2zChGSWDCDGdrG5hMzEE5x3j5PZd0pauIL8rU%2b0PS%2fnAVUtwsC1DOmBP6SM49Tg%3d%3d',
-      //   headers: headers,
-      //   success: function (result) {
-      //     if (result.code === 200) {}
-      //   }
-      // })
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js">
+  </script>
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js">
+  </script>
+  <script type="text/javascript">
+    function dihejk() {
+      var diz = document.getElementById("url").value;
+      var jkurl = document.getElementById("jk");
+      var jk = document.getElementById("jk").selectedIndex;
+      var jkv = jkurl.options[jk].value;
+      var cljurl = document.getElementById("player");
+      cljurl.src = jkv + diz
     }
   </script>
+  <!-- www.divcss5.com -->
+  <style type="text/css">
+    @charset "utf-8";
+
+    /* DIVCSS5-CSS初始化模板-www.divcss5.com */
+    body,
+    div,
+    ul,
+    li {
+      margin: 0;
+      padding: 0;
+      font-style: normal;
+      font: 12px/22px "\5B8B\4F53", Arial, Helvetica, sans-serif;
+      font-size: 18px;
+    }
+
+    .sm {
+      background-color: #FFFF66;
+      margin: 0 auto;
+      padding: 0;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      width: 100%;
+    }
+
+    /* \5B8B\4F53 代表 宋体，更多中文字体转 Unicode http://www.divcss5.com/jiqiao/j325.shtml */
+    ol,
+    ul,
+    li {
+      list-style: none
+    }
+
+    img {
+      border: 0;
+      vertical-align: middle
+    }
+
+    body {
+      color: #000000;
+      background: #FFF;
+      text-align: center
+    }
+
+    .clear {
+      clear: both;
+      height: 1px;
+      width: 100%;
+      overflow: hidden;
+      margin-top: -1px
+    }
+
+    a {
+      color: #0033FF;
+      text-decoration: none
+    }
+
+    a:hover {
+      color: #BA2636
+    }
+
+    .red,
+    .red a {
+      color: #F00
+    }
+
+    .lan,
+    .lan a {
+      color: #1E51A2
+    }
+
+    .pd5 {
+      padding-top: 5px
+    }
+
+    .dis {
+      display: block
+    }
+
+    .undis {
+      display: none
+    }
+
+    ul#nav {
+      width: 100%;
+      height: 60px;
+      background: #00A2CA;
+      margin: 0 auto;
+      overflow: auto;
+    }
+
+    ul#nav li {
+      display: inline;
+      height: 60px;
+      float: none;
+
+    }
+
+    ul#nav li a {
+      display: inline-block;
+      padding: 0 20px;
+      height: 60px;
+      line-height: 60px;
+      color: #FFF;
+      font-family: "\5FAE\8F6F\96C5\9ED1";
+      font-size: 16px
+    }
+
+    ul#nav li a:hover {
+      background: #0095BB
+    }
+  </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<body>
+  <ul id="nav">
+    <li><a href="http://www.fm4000888.cn/">首页</a></li>
+    <li><a href="http://www.nomoney.icu/vip/index.html">电脑版</a></li>
+    <li><a href="https://jq.qq.com/?_wv=1027&k=4Bjj8NC" target="_blank">加入QQ群</a></li>
+  </ul>
+  <div class="sm">
+    <p>说明：复制想看的电视剧、电影的官方链接（VIP观看的地址）到下方搜索栏，点击播放观看。"全网自动更新"为免复制，可直接观看。<a
+        href="http://player.youku.com/embed/XMTg5NTExNDk0NA==">（操作教程链接）</a></p>
+    <p>近期腾讯解析不稳定，请多换几个接口，或到<a href="http://www.52gogo.xyz" target="_blank">首页</a>观看解析好的视频。</p>
+    </strong>
+  </div>
+  <br>
+  <div class="col-md-14 column">
+    <form method="get">
+      <div class="input-group" style="width: 100%;">
+        <span class="input-group-addon input-lg" style="width: 80px; ">选择接口</span>
+        <select class="form-control input-lg" id="jk">
+          <option value="https://jx.aidouer.net/?url=" selected>（默认接口）</option>
+          <option value="https://1717yun.com.zh188.net/0526/?url=">优酷、乐视、搜狐、爱奇艺、腾讯</option>
+          <option value="https://api.okjx.cc:3389/jx.php?url=">优酷、乐视、搜狐、爱奇艺、腾讯</option>
+          <option value="http://www.wmxz.wang/video.php?url=">芒果VIP解析（超清）、腾讯</option>
+          <option value="https://www.1717yun.com/api/?url=">vip视频解析1</option>
+          <option value="https://www.8090.la/8090/?url=">vip视频解析2</option>
+          <option value="https://jx.xmflv.com/?url=">vip视频解析3</option>
+          <option value="http://vip.26db.cn/c/?url=">vip视频解析4</option>
+          <option value="https://www.8090g.cn/?url=">vip视频解析5</option>
+          <option value="https://jx.bozrc.com:4433/player/?url=">vip视频解析6</option>
+          <option value="https://okjx.cc/?url=">vip视频解析7</option>
+          <option value="https://jx.m3u8.tv/jiexi/?url=">vip视频解析8</option>
+          <option value="https://dm.xmflv.com:4433/?url=">vip视频解析9</option>
+          <option value="https://www.pangujiexi.cc/jiexi.php?url=">vip视频解析10</option>
+          <option value="https://jx.playerjy.com/?url=">vip视频解析11</option>
+          <option value="https://jx.parwix.com:4433/player/?url=">默认接口无广告</option>
+          <option value="http://z1.m1907.cn/?jx=">2022万能接口1</option>
+          <option value="https://jx.aidouer.net/?url=">2022万能接口2</option>
+          <option value="https://9kjx.com/?url=">2022万能接口3</option>
+          <option value="https://jsap.attakids.com/?url=">2022万能接口4</option>
+          <option value="https://okjx.cc/?url=">2022万能接口5</option>
+          <option value="https://0a.fit/ojTYE?url=">2022接口1无广告</option>
+          <option value="https://0a.fit/jEvzb?url=">2022接口2手机端有广告</option>
+          <option value="https://0a.fit/zLIPU?url=">2022接口3无广告</option>
+          <option value="https://www.daga.cc/vip1/?url=">2022接口蓝光解析</option>
+          <option value="https://www.daga.cc/vip2/?url=">2022接口优酷解析</option>
+          <option value="https://www.daga.cc/vip3/?url=">2022接口爱奇艺解析</option>
+          <option value="https://www.daga.cc/vip4/?url=">2022接口好莱坞解析</option>
+          <option value="https://www.bavei.com/vip/?url=">①电视剧解析（推荐）</option>
+          <option value="https://www.bavei.com/vip1/?url=">②电影解析（推荐）</option>
+          <option value="https://www.bavei.com/vip/?url=">全网解析（推荐）</option>
+          <option value="https://www.bavei.com/vip2/?url=">③视频解析（稳定）</option>
+          <option value="https://jx.xmflv.com/?url=">官解2(接口来自网络)</option>
+          <option value="https://www.nxflv.com/?url=">官解3(接口来自网络)</option>
+          <option value="https://www.qianyicp.com/jiexi/index.php?url=">⑸号解析接口</option>
+          <option value="http://api.myzch.cn/?url=">⑹号解析接口</option>
+          <option value="http://vip.66parse.club/?url=">⑺号解析接口</option>
+          <option value="http://www.bavei.com/vip/?url=">⑻号解析接口</option>
+          <option value="http://www.jzmhtt.com/zdy/vip/?url=">⑼号解析接口</option>
+          <option value="https://jsap.attakids.com/?url=">⑽号解析接口</option>
+          <option value="https://man.ledboke.com/147/?url=">⑾号解析接口</option>
+          <option value="https://okjx.cc/?url=">⑿号解析接口</option>
+          <option value="https://qsy.ctrlqq.com/?if">短视频去水印</option>
+        </select>
+      </div>
+      <br />
+      <div class="input-group" style="width: 100%;">
+        <span class="input-group-addon input-lg" style="width: 80px;">播放地址</span>
+        <input class="form-control input-lg" type="search" placeholder="输入播放地址：各视频网站VIP播放的地址链接" id="url">
+      </div>
+      <br>
+      <div>
+        <button id="bf" type="button" class="btn btn-success btn-lg btn-block" onclick="dihejk()">点击播放</button>
+      </div>
+    </form>
+  </div><br>
+  <!-- JiaThis Button BEGIN -->
+  <div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+  <div class="sm">浏览器插件，支持在各视频官网右键点击插件观看，请加QQ群获取。<a href="https://jq.qq.com/?_wv=1027&k=43N8vN2"
+      target="_blank">加入QQ群</a></strong></div>
+
+  <div class="col-md-14 column">
+    <div class="panel panel-default">
+      <div id="kj" class="panel-body">
+        <iframe allowfullscreen="true" src="http://player.youku.com/embed/XMTg5NTExNDk0NA==" id="player" width="100%"
+          height="600px" allowTransparency="true" frameborder="0" scrolling="no"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-danger" role="alert">
+    <p><a href="http://www.nomoney.icu/"
+        target="_blank">本站只提供镜像储存，所提供解析服务均由网上搜集。如侵犯了您的权益请联系我们:980352129#qq.com(请将#换成@)</a></p>
+    <p><span class="col-sm-12"><span> <a href="http://www.nomoney.icu" target="_blank">Copyright©2016 All Rights
+            Reserved.</a></span></p>
+  </div>
+  </div><br>
+  <div class="copyright">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-sm-12"><br>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
