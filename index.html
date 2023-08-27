@@ -5,23 +5,23 @@
   <meta charset="utf-8" />
   <script type="text/javascript">
 
-    // //平台、设备和操作系统
-    // var system = {
-    //   win: false,
-    //   mac: false,
-    //   xll: false
-    // };
-    // //检测平台
-    // var p = navigator.platform;
-    // system.win = p.indexOf("Win") == 0;
-    // system.mac = p.indexOf("Mac") == 0;
-    // system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
-    // //跳转语句，如果是手机访问就自动跳转到wap.baidu.com页面
-    // if (system.win || system.mac || system.xll) {
+    //平台、设备和操作系统
+    var system = {
+      win: false,
+      mac: false,
+      xll: false
+    };
+    //检测平台
+    var p = navigator.platform;
+    system.win = p.indexOf("Win") == 0;
+    system.mac = p.indexOf("Mac") == 0;
+    system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
+    //跳转语句，如果是手机访问就自动跳转到wap.baidu.com页面
+    if (system.win || system.mac || system.xll) {
 
-    // } else {
-    //   window.location.href = "sj.html";
-    // }
+    } else {
+      window.location.href = "sj.html";
+    }
   </script>
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
@@ -179,49 +179,16 @@
       <div class="input-group" style="width: 100%;">
         <span class="input-group-addon input-lg" style="width: 80px; ">选择接口</span>
         <select class="form-control input-lg" id="jk">
-          <option value="https://jx.aidouer.net/?url=" selected>（默认接口）</option>
-          <option value="https://1717yun.com.zh188.net/0526/?url=">优酷、乐视、搜狐、爱奇艺、腾讯</option>
-          <option value="https://api.okjx.cc:3389/jx.php?url=">优酷、乐视、搜狐、爱奇艺、腾讯</option>
-          <option value="http://www.wmxz.wang/video.php?url=">芒果VIP解析（超清）、腾讯</option>
-          <option value="https://www.1717yun.com/api/?url=">vip视频解析1</option>
+          <option value="https://jx.aidouer.net/?url=" selected>2022万能接口2（默认接口）</option>
           <option value="https://www.8090.la/8090/?url=">vip视频解析2</option>
           <option value="https://jx.xmflv.com/?url=">vip视频解析3</option>
-          <option value="http://vip.26db.cn/c/?url=">vip视频解析4</option>
           <option value="https://www.8090g.cn/?url=">vip视频解析5</option>
-          <option value="https://jx.bozrc.com:4433/player/?url=">vip视频解析6</option>
-          <option value="https://okjx.cc/?url=">vip视频解析7</option>
           <option value="https://jx.m3u8.tv/jiexi/?url=">vip视频解析8</option>
           <option value="https://dm.xmflv.com:4433/?url=">vip视频解析9</option>
           <option value="https://www.pangujiexi.cc/jiexi.php?url=">vip视频解析10</option>
           <option value="https://jx.playerjy.com/?url=">vip视频解析11</option>
-          <option value="https://jx.parwix.com:4433/player/?url=">默认接口无广告</option>
-          <option value="http://z1.m1907.cn/?jx=">2022万能接口1</option>
-          <option value="https://jx.aidouer.net/?url=">2022万能接口2</option>
-          <option value="https://9kjx.com/?url=">2022万能接口3</option>
-          <option value="https://jsap.attakids.com/?url=">2022万能接口4</option>
-          <option value="https://okjx.cc/?url=">2022万能接口5</option>
-          <option value="https://0a.fit/ojTYE?url=">2022接口1无广告</option>
-          <option value="https://0a.fit/jEvzb?url=">2022接口2手机端有广告</option>
-          <option value="https://0a.fit/zLIPU?url=">2022接口3无广告</option>
-          <option value="https://www.daga.cc/vip1/?url=">2022接口蓝光解析</option>
-          <option value="https://www.daga.cc/vip2/?url=">2022接口优酷解析</option>
-          <option value="https://www.daga.cc/vip3/?url=">2022接口爱奇艺解析</option>
-          <option value="https://www.daga.cc/vip4/?url=">2022接口好莱坞解析</option>
-          <option value="https://www.bavei.com/vip/?url=">①电视剧解析（推荐）</option>
-          <option value="https://www.bavei.com/vip1/?url=">②电影解析（推荐）</option>
-          <option value="https://www.bavei.com/vip/?url=">全网解析（推荐）</option>
-          <option value="https://www.bavei.com/vip2/?url=">③视频解析（稳定）</option>
           <option value="https://jx.xmflv.com/?url=">官解2(接口来自网络)</option>
-          <option value="https://www.nxflv.com/?url=">官解3(接口来自网络)</option>
-          <option value="https://www.qianyicp.com/jiexi/index.php?url=">⑸号解析接口</option>
-          <option value="http://api.myzch.cn/?url=">⑹号解析接口</option>
-          <option value="http://vip.66parse.club/?url=">⑺号解析接口</option>
-          <option value="http://www.bavei.com/vip/?url=">⑻号解析接口</option>
-          <option value="http://www.jzmhtt.com/zdy/vip/?url=">⑼号解析接口</option>
-          <option value="https://jsap.attakids.com/?url=">⑽号解析接口</option>
-          <option value="https://man.ledboke.com/147/?url=">⑾号解析接口</option>
-          <option value="https://okjx.cc/?url=">⑿号解析接口</option>
-          <option value="https://qsy.ctrlqq.com/?if">短视频去水印</option>
+          <!-- <option value="https://qsy.ctrlqq.com/?if">短视频去水印</option> -->
         </select>
       </div>
       <br />
